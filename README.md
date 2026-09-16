@@ -1,4 +1,4 @@
-# 🍫 Chocolate Sales Data Pipeline
+# Chocolate Sales Data Pipeline
 
 An end-to-end **Medallion Architecture** data pipeline built on **Databricks + PySpark + Delta Lake**, transforming raw chocolate sales data into a BI-ready star schema data warehouse.
 
@@ -8,20 +8,20 @@ Kaggle CSV → Bronze → Silver → Gold → Star Schema Warehouse → BI / Ana
 
 ---
 
-## 📌 Overview
+## Overview
 
 This project ingests the [Chocolate Sales Dataset (2023–2024)](https://www.kaggle.com/datasets/ssssws/chocolate-sales-dataset-2023-2024) from Kaggle and processes it through four progressive layers, following the classic **Bronze → Silver → Gold → Warehouse** medallion pattern used in modern lakehouse architectures.
 
 | Layer | Notebook | Schema | Purpose |
 |---|---|---|---|
-| 🥉 Bronze | `bronzechocolate.ipynb` | `workspace.bronze_chocolate` | Raw ingestion, no transformation |
-| 🥈 Silver | `silverchocolate.ipynb` | `workspace.silver_chocolate` | Cleansing, joins, enrichment |
-| 🥇 Gold | `goldchocolate.ipynb` | `workspace.gold_chocolate` | Business aggregates & dimensions |
-| ⭐ Star Schema | `starschemachocolate.ipynb` | `workspace.warehouse_chocolate` | Kimball-style fact/dimension warehouse for BI |
+|     Bronze | `bronzechocolate.ipynb` | `workspace.bronze_chocolate` | Raw ingestion, no transformation |
+|     Silver | `silverchocolate.ipynb` | `workspace.silver_chocolate` | Cleansing, joins, enrichment |
+|     Gold | `goldchocolate.ipynb` | `workspace.gold_chocolate` | Business aggregates & dimensions |
+|     Star Schema | `starschemachocolate.ipynb` | `workspace.warehouse_chocolate` | Kimball-style fact/dimension warehouse for BI |
 
 ---
 
-## 🏗️ Architecture
+##    Architecture
 
 ```mermaid
 flowchart LR
@@ -34,7 +34,7 @@ flowchart LR
 
 ---
 
-## 🥉 Bronze Layer — Raw Ingestion
+##  Bronze Layer — Raw Ingestion
 
 **Notebook:** `bronzechocolate.ipynb`
 
@@ -72,7 +72,7 @@ flowchart LR
 
 ---
 
-## 🥇 Gold Layer — Business Metrics
+##  Gold Layer — Business Metrics
 
 **Notebook:** `goldchocolate.ipynb`
 
@@ -90,7 +90,7 @@ flowchart LR
 
 ---
 
-## ⭐ Star Schema Warehouse — BI-Ready Model
+##  Star Schema Warehouse — BI-Ready Model
 
 **Notebook:** `starschemachocolate.ipynb`
 
@@ -173,14 +173,14 @@ LIMIT 20
 
 ---
 
-## ⚠️ Known Issues
+##  Known Issues
 
 - **Fact table row inflation:** joining on `product_name` / `store_name` (rather than the original surrogate/natural IDs) causes a fan-out during the Star Schema build — `fact_sales` grows from 1,000,000 rows in Gold to ~8,786,033 rows in the warehouse. This points to duplicate name values across products/stores; joining on `product_id` / `store_id` instead would avoid the fan-out.
 - **Null `product_key` values:** ~9,764 fact rows fail to match a product dimension key after the join, likely due to name mismatches (casing/whitespace) between `gold_fact_sales.product_name` and `dim_product.product_name`.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Platform:** Databricks
 - **Processing:** PySpark (Spark SQL, DataFrame API, Window functions)
@@ -190,7 +190,7 @@ LIMIT 20
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 ├── bronzechocolate.ipynb          # Bronze: raw ingestion from Kaggle
@@ -201,9 +201,9 @@ LIMIT 20
 
 ---
 
-## ▶️ How to Run
+##  How to Run
 
-1. Import all four notebooks into a Databricks workspace.
+1. Import all four notebooks into a Databricks workspace and make sure from volume paths
 2. Run `bronzechocolate.ipynb` first — it downloads the source CSVs from Kaggle and creates the `bronze_chocolate` schema/tables.
 3. Run `silverchocolate.ipynb` — reads from `bronze_chocolate`, writes to `silver_chocolate`.
 4. Run `goldchocolate.ipynb` — reads from `silver_chocolate`, writes to `gold_chocolate`.
@@ -213,7 +213,7 @@ LIMIT 20
 
 ---
 
-## 📊 Final Warehouse Summary
+##  Final Warehouse Summary
 
 | Object | Rows |
 |---|---:|
